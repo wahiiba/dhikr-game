@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dhikr Journey — Remember Allah</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D080;
+    --gold-dark: #8B6914;
+    --emerald: #1A4A3A;
+    --emerald-mid: #2D7A5F;
+    --emerald-light: #4CAF85;
+    --bg-deep: #0A1A14;
+    --bg-mid: #0F2318;
+    --bg-card: #132B1E;
+    --text-main: #E8DDB5;
+    --text-muted: #7A9A80;
+    --pearl: #F5F0E0;
+    --ruby: #C0392B;
+    --sapphire: #2980B9;
+    --radius: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-main);
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Star Background */
+  .stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(1px 1px at 10% 15%, rgba(201,168,76,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 50% 10%, rgba(201,168,76,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 60%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 75%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 85%, rgba(201,168,76,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 50%, rgba(201,168,76,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 60%, rgba(255,255,255,0.2) 0%, transparent 100%);
+  }
+
+  .app {
+    position: relative; z-index: 1;
+    max-width: 420px; margin: 0 auto;
+    padding: 0 0 80px;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(180deg, #0A1A14 0%, transparent 100%);
+    padding: 24px 20px 16px;
+    text-align: center;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .header-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 13px; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .header-arabic {
+    font-family: 'Amiri', serif;
+    font-size: 22px; color: var(--text-main);
+    opacity: 0.9;
+  }
+
+  /* LEVEL BAR */
+  .level-strip {
+    margin: 0 20px 16px;
+    background: var(--bg-card);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 50px;
+    padding: 8px 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .level-badge {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    border-radius: 50px; padding: 4px 12px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 10px; color: #0A1A14; font-weight: 700;
+    white-space: nowrap;
+  }
+  .xp-bar-wrap { flex: 1; }
+  .xp-label {
+    font-size: 10px; color: var(--text-muted);
+    margin-bottom: 4px; display: flex; justify-content: space-between;
+  }
+  .xp-bar {
+    height: 6px; background: rgba(255,255,255,0.1);
+    border-radius: 10px; overflow: hidden;
+  }
+  .xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--emerald-light), var(--gold-light));
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
+  }
+  .streak-badge {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 12px; color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex; margin: 0 20px 20px;
+    background: var(--bg-card);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 50px; padding: 4px;
+  }
+  .tab {
+    flex: 1; padding: 10px;
+    border: none; background: transparent;
+    border-radius: 50px; cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px; font-weight: 700;
+    color: var(--text-muted); letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .tab.active {
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-mid));
+    color: var(--gold-light);
+    box-shadow: 0 4px 15px rgba(45,122,95,0.4);
+  }
+
+  /* DHIKR CARD */
+  .dhikr-card {
+    margin: 0 20px 20px;
+    background: linear-gradient(145deg, var(--bg-card), #0F2218);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .dhikr-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .dhikr-arabic {
+    font-family: 'Amiri', serif;
+    font-size: 32px; line-height: 1.6;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    text-shadow: 0 0 30px rgba(201,168,76,0.3);
+  }
+  .dhikr-transliteration {
+    font-size: 13px; color: var(--emerald-light);
+    font-style: italic; margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .dhikr-meaning {
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  /* COUNTER */
+  .counter-ring-wrap {
+    display: flex; justify-content: center;
+    margin-bottom: 20px; position: relative;
+  }
+  .counter-ring {
+    position: relative; width: 160px; height: 160px;
+  }
+  .counter-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .counter-track {
+    fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8;
+  }
+  .counter-progress {
+    fill: none; stroke: url(#ringGrad); stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 0.5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .counter-inner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .counter-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 44px; color: var(--gold-light);
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(201,168,76,0.5);
+    transition: transform 0.1s;
+  }
+  .counter-number.bump { transform: scale(1.2); }
+  .counter-goal { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* BUTTONS */
+  .btn-tasbih {
+    width: 100%; padding: 18px;
+    border: none;
+    background: linear-gradient(135deg, #1A4A3A, #2D7A5F);
+    border-radius: var(--radius);
+    color: var(--gold-light);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 14px; letter-spacing: 2px;
+    cursor: pointer;
+    position: relative; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(26,74,58,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: transform 0.1s, box-shadow 0.1s;
+    border: 1px solid rgba(201,168,76,0.3);
+    margin-bottom: 10px;
+  }
+  .btn-tasbih:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 15px rgba(26,74,58,0.4);
+  }
+  .btn-tasbih::after {
+    content: ''; position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(201,168,76,0.2);
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+    transition: width 0.4s, height 0.4s, opacity 0.4s;
+    opacity: 1;
+  }
+  .btn-tasbih.ripple::after {
+    width: 300px; height: 300px; opacity: 0;
+  }
+
+  .btn-row { display: flex; gap: 10px; }
+  .btn-sm {
+    flex: 1; padding: 12px 8px;
+    border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(201,168,76,0.05);
+    border-radius: 14px;
+    color: var(--text-muted); font-size: 11px;
+    font-family: 'Lato', sans-serif; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-sm:hover { background: rgba(201,168,76,0.1); color: var(--gold); }
+
+  /* PARTICLES */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: floatUp 1.2s ease-out forwards;
+    z-index: 100;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-120px) scale(0); opacity: 0; }
+  }
+
+  /* MILESTONE TOAST */
+  .milestone-toast {
+    position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #0A1A14;
+    padding: 12px 24px; border-radius: 50px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 12px; letter-spacing: 1px;
+    box-shadow: 0 8px 30px rgba(201,168,76,0.4);
+    z-index: 200;
+    transition: top 0.5s cubic-bezier(.34,1.56,.64,1);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .milestone-toast.show { top: 20px; }
+
+  /* DHIKR SELECTOR */
+  .dhikr-selector {
+    margin: 0 20px 20px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .dhikr-option {
+    background: var(--bg-card);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 14px; padding: 14px 12px;
+    cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .dhikr-option.selected {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    box-shadow: 0 4px 15px rgba(201,168,76,0.15);
+  }
+  .dhikr-option-arabic {
+    font-family: 'Amiri', serif;
+    font-size: 18px; color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+  .dhikr-option-name {
+    font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* STATS SCREEN */
+  .stats-screen { padding: 0 20px; display: none; }
+  .stats-screen.visible { display: block; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: var(--radius);
+    padding: 20px 16px; text-align: center;
+  }
+  .stat-icon { font-size: 28px; margin-bottom: 8px; }
+  .stat-value {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 28px; color: var(--gold-light);
+  }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+  .achievements-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 12px; letter-spacing: 2px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .achievement-list { display: flex; flex-direction: column; gap: 10px; }
+  .achievement {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg-card);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 14px; padding: 14px 16px;
+    transition: all 0.3s;
+  }
+  .achievement.unlocked {
+    border-color: rgba(201,168,76,0.3);
+    background: rgba(201,168,76,0.05);
+  }
+  .ach-icon { font-size: 30px; filter: grayscale(1); opacity: 0.4; transition: all 0.3s; }
+  .achievement.unlocked .ach-icon { filter: none; opacity: 1; }
+  .ach-info { flex: 1; }
+  .ach-name { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 3px; }
+  .achievement.unlocked .ach-name { color: var(--gold-light); }
+  .ach-desc { font-size: 11px; color: var(--text-muted); }
+
+  /* COMBO */
+  .combo-display {
+    position: fixed; right: 20px; top: 50%;
+    transform: translateY(-50%);
+    text-align: center; pointer-events: none; z-index: 50;
+  }
+  .combo-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 36px; color: var(--gold);
+    text-shadow: 0 0 20px rgba(201,168,76,0.8);
+    opacity: 0; transition: opacity 0.3s;
+    line-height: 1;
+  }
+  .combo-label { font-size: 10px; color: var(--gold-light); letter-spacing: 2px; opacity: 0; transition: opacity 0.3s; }
+  .combo-display.show .combo-number,
+  .combo-display.show .combo-label { opacity: 1; }
+
+  /* GOAL SELECT */
+  .goal-section { margin: 0 20px 16px; }
+  .goal-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .goal-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .goal-pill {
+    padding: 6px 14px; border-radius: 50px;
+    border: 1px solid rgba(201,168,76,0.2);
+    background: transparent; color: var(--text-muted);
+    font-size: 12px; cursor: pointer; transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+  }
+  .goal-pill.active {
+    background: rgba(201,168,76,0.15);
+    border-color: var(--gold); color: var(--gold);
+  }
+
+  /* Quran quote */
+  .quran-quote {
+    margin: 0 20px 16px;
+    background: linear-gradient(135deg, rgba(26,74,58,0.3), rgba(45,122,95,0.1));
+    border-left: 3px solid var(--gold);
+    border-radius: 0 14px 14px 0;
+    padding: 14px 16px;
+  }
+  .quran-text {
+    font-family: 'Amiri', serif;
+    font-size: 16px; color: var(--text-main);
+    line-height: 1.8; margin-bottom: 6px;
+    direction: rtl;
+  }
+  .quran-ref { font-size: 11px; color: var(--gold); letter-spacing: 1px; }
+
+  /* Main screen visibility */
+  .main-screen { display: block; }
+  .main-screen.hidden { display: none; }
+
+  /* Glow pulse on counter */
+  @keyframes glow-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(201,168,76,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  }
+  .btn-tasbih.glow { animation: glow-pulse 0.6s ease-out; }
+
+  .section-spacer { height: 12px; }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<div class="app">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">Dhikr Journey</div>
+    <div class="header-arabic">ذِكْرُ اللَّه</div>
+  </div>
+
+  <!-- Level Bar -->
+  <div class="level-strip">
+    <div class="level-badge" id="levelBadge">LVL 1</div>
+    <div class="xp-bar-wrap">
+      <div class="xp-label">
+        <span id="xpLabel">0 / 100 XP</span>
+        <span id="levelName">Seeker</span>
+      </div>
+      <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    </div>
+    <div class="streak-badge">🔥 <span id="streakCount">0</span></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" id="tabDhikr" onclick="switchTab('dhikr')">Dhikr</button>
+    <button class="tab" id="tabStats" onclick="switchTab('stats')">Stats</button>
+  </div>
+
+  <!-- MAIN DHIKR SCREEN -->
+  <div class="main-screen" id="mainScreen">
+
+    <!-- Quran Quote -->
+    <div class="quran-quote">
+      <div class="quran-text" id="quranText">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div>
+      <div class="quran-ref" id="quranRef">— Verily, in the remembrance of Allah do hearts find rest. (13:28)</div>
+    </div>
+
+    <!-- Dhikr Selector -->
+    <div class="dhikr-selector" id="dhikrSelector"></div>
+
+    <!-- Goal Selector -->
+    <div class="goal-section">
+      <div class="goal-label">Daily Goal</div>
+      <div class="goal-pills" id="goalPills"></div>
+    </div>
+
+    <!-- Dhikr Card -->
+    <div class="dhikr-card">
+      <div class="dhikr-arabic" id="currentArabic">سُبْحَانَ اللَّه</div>
+      <div class="dhikr-transliteration" id="currentTranslit">Subḥān Allāh</div>
+      <div class="dhikr-meaning" id="currentMeaning">Glory be to Allah</div>
+
+      <!-- Ring Counter -->
+      <div class="counter-ring-wrap">
+        <div class="counter-ring">
+          <svg class="counter-svg" viewBox="0 0 160 160">
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#4CAF85"/>
+                <stop offset="100%" style="stop-color:#F0D080"/>
+              </linearGradient>
+            </defs>
+            <circle class="counter-track" cx="80" cy="80" r="70"/>
+            <circle class="counter-progress" id="counterArc" cx="80" cy="80" r="70"/>
+          </svg>
+          <div class="counter-inner">
+            <div class="counter-number" id="counterNum">0</div>
+            <div class="counter-goal" id="counterGoal">/ 33</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-tasbih" id="mainBtn" onclick="doCount()">
+        ✦ Count ✦
+      </button>
+      <div class="btn-row">
+        <button class="btn-sm" onclick="resetSession()">↺ Reset</button>
+        <button class="btn-sm" onclick="nextDhikr()">→ Next</button>
+      </div>
+    </div>
+
+  </div><!-- end main-screen -->
+
+  <!-- STATS SCREEN -->
+  <div class="stats-screen" id="statsScreen">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📿</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Total Dhikr</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value" id="statToday">0</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value" id="statLevel">1</div>
+        <div class="stat-label">Level</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value" id="statXP">0</div>
+        <div class="stat-label">Total XP</div>
+      </div>
+    </div>
+    <div class="achievements-title">🏅 Achievements</div>
+    <div class="achievement-list" id="achievementList"></div>
+    <div class="section-spacer"></div>
+  </div>
+
+</div>
+
+<!-- Combo display -->
+<div class="combo-display" id="comboDisplay">
+  <div class="combo-number" id="comboNum">x1</div>
+  <div class="combo-label">COMBO</div>
+</div>
+
+<!-- Milestone Toast -->
+<div class="milestone-toast" id="milestoneToast">🌟 Milestone!</div>
+
+<script>
+const DHIKRS = [
+  { arabic: 'سُبْحَانَ اللَّه', translit: 'Subḥān Allāh', meaning: 'Glory be to Allah', key: 'tasbih', color: '#4CAF85' },
+  { arabic: 'الْحَمْدُ لِلَّه', translit: 'Al-Ḥamdu lillāh', meaning: 'Praise be to Allah', key: 'tahmid', color: '#C9A84C' },
+  { arabic: 'اللَّهُ أَكْبَر', translit: 'Allāhu Akbar', meaning: 'Allah is the Greatest', key: 'takbir', color: '#E8A020' },
+  { arabic: 'لَا إِلَهَ إِلَّا اللَّه', translit: 'Lā ilāha illa-Llāh', meaning: 'There is no god but Allah', key: 'tahlil', color: '#9B59B6' },
+  { arabic: 'أَسْتَغْفِرُ اللَّه', translit: 'Astaghfiru-Llāh', meaning: 'I seek forgiveness from Allah', key: 'istighfar', color: '#2980B9' },
+  { arabic: 'صَلَّى اللَّهُ عَلَى مُحَمَّد', translit: 'Ṣallā-Llāhu ʿalā Muḥammad', meaning: 'May Allah bless Muhammad ﷺ', key: 'salawat', color: '#C0392B' },
+];
+
+const GOALS = [33, 100, 200, 500, 1000];
+
+const QUOTES = [
+  { text: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', ref: '— Verily, in the remembrance of Allah do hearts find rest. (13:28)' },
+  { text: 'فَاذْكُرُونِي أَذْكُرْكُمْ', ref: '— So remember Me, I will remember you. (2:152)' },
+  { text: 'يَا أَيُّهَا الَّذِينَ آمَنُوا اذْكُرُوا اللَّهَ ذِكْرًا كَثِيرًا', ref: '— O believers, remember Allah often. (33:41)' },
+];
+
+const LEVELS = [
+  { name: 'Seeker', xp: 0 }, { name: 'Devotee', xp: 100 },
+  { name: 'Worshipper', xp: 300 }, { name: 'Ascetic', xp: 700 },
+  { name: 'Scholar', xp: 1500 }, { name: 'Sage', xp: 3000 },
+  { name: 'Saint', xp: 6000 }, { name: 'Beloved', xp: 12000 },
+];
+
+const ACHIEVEMENTS = [
+  { id: 'first', icon: '🌱', name: 'First Step', desc: 'Make your first dhikr', req: c => c.total >= 1 },
+  { id: 'round33', icon: '📿', name: 'One Round', desc: 'Complete 33 dhikr', req: c => c.total >= 33 },
+  { id: 'century', icon: '💯', name: 'Century', desc: 'Reach 100 total dhikr', req: c => c.total >= 100 },
+  { id: 'istighfar', icon: '🤲', name: 'Seeker of Forgiveness', desc: 'Say Istighfar 100 times', req: c => (c.istighfar || 0) >= 100 },
+  { id: 'tasbih500', icon: '✨', name: 'Glorifier', desc: 'Say Tasbih 500 times', req: c => (c.tasbih || 0) >= 500 },
+  { id: 'thousand', icon: '🏆', name: 'Thousand', desc: 'Reach 1000 total dhikr', req: c => c.total >= 1000 },
+  { id: 'level5', icon: '⭐', name: 'Scholar', desc: 'Reach Level 5', req: c => c.level >= 5 },
+  { id: 'alldhikr', icon: '🌟', name: 'Complete Worshipper', desc: 'Use all 6 types of dhikr', req: c => c.typesUsed && c.typesUsed.size >= 6 },
+];
+
+// State
+let state = JSON.parse(localStorage.getItem('dhikrState') || 'null') || {
+  total: 0, today: 0, xp: 0, level: 1,
+  streak: 0, sessionCount: 0,
+  currentDhikrIdx: 0, goal: 33,
+  counts: {}, typesUsed: [],
+  lastDate: '',
+  unlockedAchievements: [],
+};
+if (state.typesUsed && !state.typesUsed.size) {
+  state.typesUsed = new Set(state.typesUsed);
+} else {
+  state.typesUsed = new Set(state.typesUsed || []);
+}
+
+let comboTimer = null;
+let combo = 0;
+let quoteIdx = 0;
+
+function save() {
+  const toSave = { ...state, typesUsed: [...state.typesUsed] };
+  localStorage.setItem('dhikrState', JSON.stringify(toSave));
+}
+
+function checkDate() {
+  const today = new Date().toDateString();
+  if (state.lastDate !== today) {
+    state.today = 0;
+    state.lastDate = today;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    // streak logic simplified
+    save();
+  }
+}
+
+function buildDhikrSelector() {
+  const el = document.getElementById('dhikrSelector');
+  el.innerHTML = DHIKRS.map((d, i) => `
+    <div class="dhikr-option ${i === state.currentDhikrIdx ? 'selected' : ''}" onclick="selectDhikr(${i})">
+      <div class="dhikr-option-arabic">${d.arabic.split(' ').slice(0,2).join(' ')}</div>
+      <div class="dhikr-option-name">${d.key}</div>
+    </div>
+  `).join('');
+}
+
+function buildGoalPills() {
+  const el = document.getElementById('goalPills');
+  el.innerHTML = GOALS.map(g => `
+    <button class="goal-pill ${g === state.goal ? 'active' : ''}" onclick="setGoal(${g})">${g}</button>
+  `).join('');
+}
+
+function selectDhikr(idx) {
+  state.currentDhikrIdx = idx;
+  state.sessionCount = 0;
+  save();
+  buildDhikrSelector();
+  updateDhikrCard();
+  updateArc();
+}
+
+function setGoal(g) {
+  state.goal = g;
+  save();
+  buildGoalPills();
+  updateArc();
+  document.getElementById('counterGoal').textContent = `/ ${g}`;
+}
+
+function updateDhikrCard() {
+  const d = DHIKRS[state.currentDhikrIdx];
+  document.getElementById('currentArabic').textContent = d.arabic;
+  document.getElementById('currentTranslit').textContent = d.translit;
+  document.getElementById('currentMeaning').textContent = d.meaning;
+}
+
+function updateArc() {
+  const pct = Math.min(state.sessionCount / state.goal, 1);
+  const circumference = 2 * Math.PI * 70; // ~440
+  const offset = circumference - pct * circumference;
+  document.getElementById('counterArc').style.strokeDashoffset = offset;
+  document.getElementById('counterNum').textContent = state.sessionCount;
+  document.getElementById('counterGoal').textContent = `/ ${state.goal}`;
+}
+
+function updateXPBar() {
+  // find level
+  let lvl = 0;
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (state.xp >= LEVELS[i].xp) { lvl = i; break; }
+  }
+  state.level = lvl + 1;
+  const nextLvl = LEVELS[lvl + 1] || { xp: state.xp + 1 };
+  const curLvl = LEVELS[lvl];
+  const pct = ((state.xp - curLvl.xp) / (nextLvl.xp - curLvl.xp)) * 100;
+  document.getElementById('xpFill').style.width = `${Math.min(pct, 100)}%`;
+  document.getElementById('xpLabel').textContent = `${state.xp} / ${nextLvl.xp} XP`;
+  document.getElementById('levelBadge').textContent = `LVL ${state.level}`;
+  document.getElementById('levelName').textContent = LEVELS[lvl].name;
+  document.getElementById('streakCount').textContent = state.streak;
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = state.total;
+  document.getElementById('statToday').textContent = state.today;
+  document.getElementById('statLevel').textContent = state.level;
+  document.getElementById('statXP').textContent = state.xp;
+}
+
+function buildAchievements() {
+  const el = document.getElementById('achievementList');
+  el.innerHTML = ACHIEVEMENTS.map(a => {
+    const unlocked = state.unlockedAchievements.includes(a.id);
+    return `
+      <div class="achievement ${unlocked ? 'unlocked' : ''}">
+        <div class="ach-icon">${a.icon}</div>
+        <div class="ach-info">
+          <div class="ach-name">${a.name}</div>
+          <div class="ach-desc">${a.desc}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function checkAchievements() {
+  const checks = { ...state.counts, total: state.total, level: state.level, typesUsed: state.typesUsed };
+  ACHIEVEMENTS.forEach(a => {
+    if (!state.unlockedAchievements.includes(a.id) && a.req(checks)) {
+      state.unlockedAchievements.push(a.id);
+      showMilestone(`🏅 ${a.name} Unlocked!`);
+    }
+  });
+}
+
+function showMilestone(msg) {
+  const t = document.getElementById('milestoneToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function spawnParticle(x, y) {
+  const colors = ['#C9A84C','#F0D080','#4CAF85','#E8DDB5'];
+  for (let i = 0; i < 6; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 4 + Math.random() * 6;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${x + (Math.random()-0.5)*60}px;
+      top:${y}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-delay:${Math.random()*0.2}s;
+      animation-duration:${0.8 + Math.random()*0.6}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
+  }
+}
+
+function updateCombo() {
+  combo++;
+  clearTimeout(comboTimer);
+  const cd = document.getElementById('comboDisplay');
+  document.getElementById('comboNum').textContent = `x${combo}`;
+  if (combo >= 3) {
+    cd.classList.add('show');
+    comboTimer = setTimeout(() => {
+      cd.classList.remove('show');
+      combo = 0;
+    }, 2000);
+  } else {
+    cd.classList.remove('show');
+  }
+}
+
+function doCount() {
+  const btn = document.getElementById('mainBtn');
+  const rect = btn.getBoundingClientRect();
+  spawnParticle(rect.left + rect.width/2, rect.top);
+
+  // Ripple
+  btn.classList.remove('ripple', 'glow');
+  void btn.offsetWidth;
+  btn.classList.add('ripple', 'glow');
+
+  // Bump number
+  const numEl = document.getElementById('counterNum');
+  numEl.classList.remove('bump');
+  void numEl.offsetWidth;
+  numEl.classList.add('bump');
+  setTimeout(() => numEl.classList.remove('bump'), 150);
+
+  // Update counts
+  state.sessionCount++;
+  state.total++;
+  state.today++;
+  const key = DHIKRS[state.currentDhikrIdx].key;
+  state.counts[key] = (state.counts[key] || 0) + 1;
+  state.typesUsed.add(key);
+
+  // XP
+  let xpGain = 1;
+  if (state.sessionCount % 33 === 0) xpGain += 5;
+  if (state.sessionCount % 100 === 0) xpGain += 20;
+  state.xp += xpGain;
+  state.streak++;
+
+  // Milestone checks
+  if (state.sessionCount === state.goal) {
+    showMilestone(`🎉 Goal of ${state.goal} reached!`);
+    setTimeout(() => { state.sessionCount = 0; updateArc(); }, 2000);
+  }
+  if (state.total % 100 === 0) showMilestone(`✨ ${state.total} total dhikr!`);
+
+  updateArc();
+  updateXPBar();
+  updateStats();
+  updateCombo();
+  checkAchievements();
+  save();
+
+  // Rotate quote every 33 counts
+  if (state.total % 33 === 0) {
+    quoteIdx = (quoteIdx + 1) % QUOTES.length;
+    const q = QUOTES[quoteIdx];
+    document.getElementById('quranText').textContent = q.text;
+    document.getElementById('quranRef').textContent = q.ref;
+  }
+}
+
+function resetSession() {
+  state.sessionCount = 0;
+  combo = 0;
+  document.getElementById('comboDisplay').classList.remove('show');
+  updateArc();
+  save();
+}
+
+function nextDhikr() {
+  selectDhikr((state.currentDhikrIdx + 1) % DHIKRS.length);
+}
+
+function switchTab(tab) {
+  if (tab === 'dhikr') {
+    document.getElementById('mainScreen').style.display = 'block';
+    document.getElementById('statsScreen').style.display = 'none';
+    document.getElementById('tabDhikr').classList.add('active');
+    document.getElementById('tabStats').classList.remove('active');
+  } else {
+    document.getElementById('mainScreen').style.display = 'none';
+    document.getElementById('statsScreen').style.display = 'block';
+    document.getElementById('tabStats').classList.add('active');
+    document.getElementById('tabDhikr').classList.remove('active');
+    buildAchievements();
+    updateStats();
+  }
+}
+
+// Init
+checkDate();
+buildDhikrSelector();
+buildGoalPills();
+updateDhikrCard();
+updateArc();
+updateXPBar();
+updateStats();
+</script>
+</body>
+</html>
